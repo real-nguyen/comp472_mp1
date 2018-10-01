@@ -2,6 +2,7 @@ import java.util.Stack;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class DepthFirstSearch {
 	private final String OUTPUT_PATH = "output/puzzleDFS.txt";
@@ -37,31 +38,51 @@ public class DepthFirstSearch {
 //	}
 	
 	public void getSolutionPath() {
-		Node initialState = new Node(puzzle.getPuzzle(), puzzle.getEmptyTilePosition());
-
-		openList.add(initialState);
+		Node initialState = new Node(puzzle);
+		generateSearchTree(initialState);
+		
+		openList.push(initialState);
 		search(initialState);
 	}
 	
-	public boolean search(Node n) {
-		while (!openList.isEmpty()) {
-			if (puzzle.isSolved()) {
+	public boolean search(Node nodeToVisit) {
+		if (!openList.isEmpty()) {
+			visitNode(nodeToVisit);
+			
+			if (Puzzle.isSolved(nodeToVisit.getPuzzle())) {
 				return true;
 			}
 			
-			n.visit();
-			closedList.add(n);
+			//need to reverse list to push to stack in correct order
+			//i.e. to traverse tree left to right
+			ArrayList<Node> childNodes = nodeToVisit.getChildNodes();
+			Collections.reverse(childNodes);
 			
-			
-			
-			for (Node child : n.getChildNodes()) {
-				
+			for (Node child : childNodes) {
+				openList.push(child);
 			}
-		}		
+			return search(openList.pop());
+		}
 		return false;
 	}
 	
-	private void getPossibleMoves() {
-		
+	private void visitNode(Node n) {
+		n.visit();
+		closedList.add(n);		
+	}
+	
+	private void addNodeToOpenList(Node n) {
+		if (!n.isVisited()) {
+			openList.push(n);
+		}
+	}
+	
+	private void generateSearchTree(Node n) {
+		//generate all possible moves from this state and add them as children
+		//only add nodes if they are not in the search tree or have not been generated
+
+		if (openList.contains(n) || closedList.contains(n)) {
+			return;
+		}
 	}
 }

@@ -1,35 +1,32 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Node {
 	private Node parentNode;
 	private ArrayList<Node> childNodes;
-	private int[] stateRepresentation;
-	private char emptyTilePosition;
+	private Puzzle stateRepresentation;
 	private boolean isVisited;
 	
-	public Node(Node parentNode, ArrayList<Node> childNodes, int[] stateRepresentation, char emptyTilePosition) {
+	public Node(Node parentNode, ArrayList<Node> childNodes, Puzzle stateRepresentation) {
 		this.parentNode = parentNode;
 		this.childNodes = childNodes;
 		this.stateRepresentation = stateRepresentation;
-		this.emptyTilePosition = emptyTilePosition;
 	}		
 	
-	public Node(Node parentNode, int[] stateRepresentation, char emptyTilePosition) {
+	public Node(Node parentNode, Puzzle stateRepresentation) {
 		this.parentNode = parentNode;
 		this.stateRepresentation = stateRepresentation;
 		this.childNodes = new ArrayList<Node>();
-		this.emptyTilePosition = emptyTilePosition;
 	}
 	
-	public Node(int[] stateRepresentation, char emptyTilePosition) {
+	public Node(Puzzle stateRepresentation) {
 		this.stateRepresentation = stateRepresentation;
 		this.childNodes = new ArrayList<Node>();
-		this.emptyTilePosition = emptyTilePosition;
 	}
 	
 	public Node(Node n) {
 		//for deep copying
-		this(n.getParentNode(), n.getChildNodes(), n.getStateRepresentation(), n.getEmptyTilePosition());
+		this(n.getParentNode(), n.getChildNodes(), n.getStateRepresentation());
 	}
 	
 	public Node() {
@@ -68,19 +65,39 @@ public class Node {
 		return newList;
 	}
 	
-	public int[] getStateRepresentation() {
+	public Puzzle getStateRepresentation() {
 		return stateRepresentation;
 	}
-	
-	public char getEmptyTilePosition() {
-		return emptyTilePosition;
-	}
-	
-	public boolean getIsVisited() {
+
+	public boolean isVisited() {
 		return isVisited;
 	}
 	
 	public void visit() {
 		isVisited = true;
+	}
+	
+	public boolean isLeaf() {
+		return childNodes.size() == 0;
+	}
+
+	public int[] getPuzzle() {
+		return stateRepresentation.getPuzzle();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		//Source: https://www.geeksforgeeks.org/overriding-equals-method-in-java/
+		if (o == this) {
+			return true;
+		}
+		
+		if (!(o instanceof Node)) {
+			return false;
+		}
+		
+		Node n = (Node) o;
+		
+		return Arrays.equals(this.getPuzzle(), n.getPuzzle());
 	}
 }
