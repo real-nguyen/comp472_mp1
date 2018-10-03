@@ -2,10 +2,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Node {
-	private Node parentNode;
-	private ArrayList<Node> childNodes;
-	private Puzzle stateRepresentation;
-	private boolean isVisited;
+	protected Node parentNode;
+	protected ArrayList<Node> childNodes;
+	protected Puzzle stateRepresentation;
+	protected boolean isVisited;
 	
 	public Node(Node parentNode, ArrayList<Node> childNodes, Puzzle stateRepresentation) {
 		this.parentNode = parentNode;
@@ -30,7 +30,6 @@ public class Node {
 	}
 	
 	public Node() {
-		//TEST PURPOSES ONLY
 		this.childNodes = new ArrayList<Node>();
 	}
 	
@@ -42,13 +41,6 @@ public class Node {
 		}
 		
 		return null;
-	}
-	
-	public void addChildren(ArrayList<Node> nodes) {
-		//to avoid adding duplicate states
-		for (Node n : nodes) {
-			addChild(n);
-		}
 	}
 	
 	public Node getParentNode() {

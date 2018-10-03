@@ -8,17 +8,14 @@ import java.util.Stack;
 public class BestFirstSearch {
 	private String outputPath = "output/puzzleBFS-_.txt";	
 	private Puzzle puzzle;	
-	private PriorityQueue<Node> openList;
+	private PriorityQueue<HeuristicNode> openList;
 	private ArrayList<Node> closedList;
+	private String currentHeuristic;
 	
 	public BestFirstSearch(Puzzle puzzle, String heuristic) {
 		this.puzzle = puzzle;
-		if (heuristic == "h1") {
-			openList = new PriorityQueue<Node>(new Heuristic_TilesOutOfPlace());			
-		}
-		else {
-			openList = new PriorityQueue<Node>();
-		}
+		this.currentHeuristic = heuristic;
+		openList = new PriorityQueue<HeuristicNode>(new BFSComparator());
 		outputPath = outputPath.replaceAll("_", heuristic);
 		closedList = new ArrayList<Node>();
 	}
@@ -30,7 +27,7 @@ public class BestFirstSearch {
 			//will clear file every time
 			PrintWriter pw = new PrintWriter(outputPath);
 			
-			Node initialState = new Node(puzzle);
+			HeuristicNode initialState = new HeuristicNode(puzzle, currentHeuristic);
 			openList.offer(initialState);
 			boolean solutionFound = search(initialState);
 			
@@ -69,7 +66,7 @@ public class BestFirstSearch {
 		}
 	}
 	
-	public boolean search(Node nodeToVisit) {
+	public boolean search(HeuristicNode nodeToVisit) {
 		if (!openList.isEmpty()) {			
 			nodeToVisit = openList.poll();				
 			visitNode(nodeToVisit);
@@ -78,9 +75,9 @@ public class BestFirstSearch {
 				return true;
 			}
 			
-			ArrayList<Node> childNodes = generateChildNodes(nodeToVisit);
+			ArrayList<HeuristicNode> childNodes = generateChildNodes(nodeToVisit);
 			
-			for (Node child : childNodes) {
+			for (HeuristicNode child : childNodes) {
 				addChildNode(nodeToVisit, child);
 			}						
 			
@@ -98,40 +95,40 @@ public class BestFirstSearch {
 		return openList.contains(n) || closedList.contains(n);
 	}
 	
-	private ArrayList<Node> generateChildNodes(Node currentNode) {
+	private ArrayList<HeuristicNode> generateChildNodes(HeuristicNode currentNode) {
 		//generate all possible moves from this state and add them as children
-		ArrayList<Node> childNodes = new ArrayList<Node>();
+		ArrayList<HeuristicNode> childNodes = new ArrayList<HeuristicNode>();
 		
 		Puzzle currentState = currentNode.getStateRepresentation();
 		if (currentState.canMoveUp()) {
-			childNodes.add(new Node(currentState.moveUp()));
+			childNodes.add(new HeuristicNode(currentState.moveUp(), currentHeuristic));
 		}
 		if (currentState.canMoveUpRight()) {
-			childNodes.add(new Node(currentState.moveUpRight()));
+			childNodes.add(new HeuristicNode(currentState.moveUpRight(), currentHeuristic));
 		}
 		if (currentState.canMoveRight()) {
-			childNodes.add(new Node(currentState.moveRight()));
+			childNodes.add(new HeuristicNode(currentState.moveRight(), currentHeuristic));
 		}
 		if (currentState.canMoveDownRight()) {
-			childNodes.add(new Node(currentState.moveDownRight()));
+			childNodes.add(new HeuristicNode(currentState.moveDownRight(), currentHeuristic));
 		}
 		if (currentState.canMoveDown()) {
-			childNodes.add(new Node(currentState.moveDown()));
+			childNodes.add(new HeuristicNode(currentState.moveDown(), currentHeuristic));
 		}
 		if (currentState.canMoveDownLeft()) {
-			childNodes.add(new Node(currentState.moveDownLeft()));
+			childNodes.add(new HeuristicNode(currentState.moveDownLeft(), currentHeuristic));
 		}
 		if (currentState.canMoveLeft()) {
-			childNodes.add(new Node(currentState.moveLeft()));
+			childNodes.add(new HeuristicNode(currentState.moveLeft(), currentHeuristic));
 		}
 		if (currentState.canMoveUpLeft()) {
-			childNodes.add(new Node(currentState.moveUpLeft()));
+			childNodes.add(new HeuristicNode(currentState.moveUpLeft(), currentHeuristic));
 		}
 		
 		return childNodes;
 	}
 	
-	private void addChildNode(Node currentNode, Node nodeToAdd) {
+	private void addChildNode(HeuristicNode currentNode, HeuristicNode nodeToAdd) {
 		if (!isDuplicateState(nodeToAdd)) {
 			currentNode.addChild(nodeToAdd);
 			openList.offer(nodeToAdd);
