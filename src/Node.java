@@ -88,6 +88,8 @@ public class Node {
 	@Override
 	public boolean equals(Object o) {
 		//Source: https://www.geeksforgeeks.org/overriding-equals-method-in-java/
+		//for collections' contains method
+		//will not add to the stack/queue/priority queue if this node's state is in the collection
 		if (o == this) {
 			return true;
 		}
@@ -99,5 +101,9 @@ public class Node {
 		Node n = (Node) o;
 		
 		return Arrays.equals(this.getPuzzle(), n.getPuzzle());
+	}
+	
+	public String toString() {
+		return this.getStateRepresentation().toString();
 	}
 }

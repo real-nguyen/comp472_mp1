@@ -107,93 +107,79 @@ public class Puzzle {
 		return newPuzzle;
 	}
 	
+	//BEGIN helper methods
+	public boolean canMoveUp() { 
+		return getEmptyTileIndex() > ROW_SIZE - 1;
+	}
+	
+	public boolean canMoveUpRight() { 
+		return canMoveUp() && canMoveRight();
+	}
+	
+	public boolean canMoveRight() { 
+		return (getEmptyTileIndex() + 1) % ROW_SIZE != 0;
+	}
+	
+	public boolean canMoveDownRight() { 
+		return canMoveDown() && canMoveRight();
+	}
+	
+	public boolean canMoveDown() { 
+		return (getEmptyTileIndex() < (goalState.length - ROW_SIZE));
+	}
+	
+	public boolean canMoveDownLeft() { 
+		return canMoveDown() && canMoveLeft();
+	}
+	
+	public boolean canMoveLeft() { 
+		return getEmptyTileIndex() % ROW_SIZE != 0;
+	}
+	
+	public boolean canMoveUpLeft() { 
+		return canMoveUp() && canMoveLeft();
+	}
+	//END helper methods
+	
+	
 	//BEGIN set of operators
-	public Puzzle moveUp() {		
+	public Puzzle moveUp() {						
 		int emptyTileIndex = getEmptyTileIndex();
-		//can't move up if in top row
-		if (emptyTileIndex <= ROW_SIZE - 1) {
-			return this;
-		}
-		
 		return swapTiles(emptyTileIndex, emptyTileIndex - ROW_SIZE);
 	}
 	
 	public Puzzle moveUpRight() {
 		int emptyTileIndex = getEmptyTileIndex();
-		//can't move up if in top row or in rightmost column
-		if (emptyTileIndex <= ROW_SIZE - 1 || (emptyTileIndex + 1) % ROW_SIZE == 0) {
-			return this;
-		}
-		
 		return swapTiles(emptyTileIndex, emptyTileIndex - ROW_SIZE + 1);
 	}
 	
 	public Puzzle moveRight() {
 		int emptyTileIndex = getEmptyTileIndex();
-		//can't move right if in rightmost column
-		if ((emptyTileIndex + 1) % ROW_SIZE == 0) {
-			return this;
-		}
-		
 		return swapTiles(emptyTileIndex, emptyTileIndex + 1);
 	}
 	
 	public Puzzle moveDownRight() {
 		int emptyTileIndex = getEmptyTileIndex();
-		int lastIndex = puzzle.length - 1;
-		int firstLastRowIndex = puzzle.length - ROW_SIZE;
-		
-		//can't move right if in rightmost column or in bottom row
-		if ((emptyTileIndex + 1) % ROW_SIZE == 0 || (emptyTileIndex >= firstLastRowIndex && emptyTileIndex <= lastIndex)) {
-			return this;
-		}
-		
 		return swapTiles(emptyTileIndex, emptyTileIndex + ROW_SIZE + 1);
 	}
 	
 	public Puzzle moveDown() {
 		int emptyTileIndex = getEmptyTileIndex();
-		int lastIndex = puzzle.length - 1;
-		int firstLastRowIndex = puzzle.length - ROW_SIZE;
-		
-		//can't move down if in bottom row
-		if (emptyTileIndex >= firstLastRowIndex && emptyTileIndex <= lastIndex) {
-			return this;
-		}
-		
 		return swapTiles(emptyTileIndex, emptyTileIndex + ROW_SIZE);
 	}
 	
 	public Puzzle moveDownLeft() {
 		int emptyTileIndex = getEmptyTileIndex();
-		int lastIndex = puzzle.length - 1;
-		int firstLastRowIndex = puzzle.length - ROW_SIZE;
-		
-		//can't move left if in leftmost column or in bottom row
-		if (emptyTileIndex % ROW_SIZE == 0 || (emptyTileIndex >= firstLastRowIndex && emptyTileIndex <= lastIndex)) {
-			return this;
-		}
-		
 		return swapTiles(emptyTileIndex, emptyTileIndex + ROW_SIZE - 1);
 	}
 	
 	public Puzzle moveLeft() {
 		int emptyTileIndex = getEmptyTileIndex();
-		//can't move left if in leftmost column
-		if (emptyTileIndex % ROW_SIZE == 0) {
-			return this;
-		}
-		
 		return swapTiles(emptyTileIndex, emptyTileIndex - 1);
 	}
 	
 	public Puzzle moveUpLeft() {
 		int emptyTileIndex = getEmptyTileIndex();
-		//can't move left if in leftmost column or in top row
-		if (emptyTileIndex % ROW_SIZE == 0 || emptyTileIndex <= ROW_SIZE - 1) {
-			return this;
-		}
-		
 		return swapTiles(emptyTileIndex, emptyTileIndex - ROW_SIZE - 1);
 	}
 	
