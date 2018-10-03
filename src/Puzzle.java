@@ -34,27 +34,27 @@ public class Puzzle {
 		
 		
 		//TEST PURPOSES ONLY
-		initialState = new int[] {1, 2, 3, 4, 5, 6, 7, 0, 9, 10, 11, 8};
-		puzzle = Arrays.copyOf(initialState, initialState.length);
+//		initialState = new int[] {1, 2, 3, 4, 5, 6, 7, 0, 9, 10, 11, 8};
+//		puzzle = Arrays.copyOf(initialState, initialState.length);
 		//END TEST
 				
-//		initialState = new int[ROW_SIZE * COLUMN_SIZE];
-//		try {
-//			BufferedReader in = new BufferedReader(new FileReader(INPUT_FILE));
-//			String line;
-//			while ((line = in.readLine()) != null)
-//			{
-//			    String[] tiles = line.split(" ");
-//			    
-//			    for (int i = 0; i < tiles.length; i++) {
-//			    	puzzle[i] = Integer.parseInt(tiles[i]);
-//			    }
-//			}
-//			in.close();
-//		} catch (IOException e) {
-//			//either file not found or error while reading
-//			e.printStackTrace();
-//		}
+		initialState = new int[ROW_SIZE * COLUMN_SIZE];
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(INPUT_FILE));
+			String line;
+			while ((line = in.readLine()) != null)
+			{
+			    String[] tiles = line.split(" ");
+			    
+			    for (int i = 0; i < tiles.length; i++) {
+			    	puzzle[i] = Integer.parseInt(tiles[i]);
+			    }
+			}
+			in.close();
+		} catch (IOException e) {
+			//either file not found or error while reading
+			e.printStackTrace();
+		}
 	}
 	
 	private void initializeGoalState() {
@@ -63,6 +63,10 @@ public class Puzzle {
 			goalState[i] = i + 1;
 		}
 		goalState[puzzle.length - 1] = 0;
+	}
+	
+	public static int[] getGoalState() {
+		return Arrays.copyOf(goalState, goalState.length);
 	}
 	
 	public String toString() {

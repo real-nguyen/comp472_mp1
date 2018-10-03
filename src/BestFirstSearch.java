@@ -1,20 +1,26 @@
-import java.util.Stack;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.PriorityQueue;
+import java.util.Stack;
 
-public class DepthFirstSearch {
-	private final String OUTPUT_PATH = "output/puzzleDFS.txt";
-	
+public class BestFirstSearch {
+	private String outputPath = "output/puzzleBFS-_.txt";	
 	private Puzzle puzzle;	
-	private Stack<Node> openList;
+	private PriorityQueue<Node> openList;
 	private ArrayList<Node> closedList;
 	
-	public DepthFirstSearch(Puzzle puzzle) {
+	public BestFirstSearch(Puzzle puzzle, String heuristic) {
 		this.puzzle = puzzle;
-		this.openList = new Stack<Node>();
-		this.closedList = new ArrayList<Node>();
+		if (heuristic == "h1") {
+			openList = new PriorityQueue<Node>(new Heuristic_TilesOutOfPlace());			
+		}
+		else {
+			openList = new PriorityQueue<Node>();
+		}
+		outputPath = outputPath.replaceAll("_", heuristic);
+		closedList = new ArrayList<Node>();
 	}
 	
 	public void getSolutionPath() {
@@ -22,10 +28,10 @@ public class DepthFirstSearch {
 		//Source: https://stackoverflow.com/questions/2885173/how-do-i-create-a-file-and-write-to-it-in-java
 		try {
 			//will clear file every time
-			PrintWriter pw = new PrintWriter(OUTPUT_PATH);
+			PrintWriter pw = new PrintWriter(outputPath);
 			
 			Node initialState = new Node(puzzle);
-			openList.push(initialState);
+			openList.offer(initialState);
 			boolean solutionFound = search(initialState);
 			
 			if (solutionFound) {
@@ -61,42 +67,25 @@ public class DepthFirstSearch {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-				
 	}
 	
-	private boolean search(Node nodeToVisit) {
-		try {
-			if (!openList.isEmpty()) {
-				nodeToVisit = openList.pop();
-				visitNode(nodeToVisit);
-				
-				if (Puzzle.isSolved(nodeToVisit.getPuzzle())) {
-					return true;
-				}
-				
-				ArrayList<Node> childNodes = generateChildNodes(nodeToVisit);
-				
-				//need to reverse list to push to stack in correct order
-				//i.e. to traverse tree left to right
-				Collections.reverse(childNodes);
-				
-				for (Node child : childNodes) {
-					addChildNode(nodeToVisit, child);
-				}								
-				
-				return search(nodeToVisit);
+	public boolean search(Node nodeToVisit) {
+		if (!openList.isEmpty()) {			
+			nodeToVisit = openList.poll();				
+			visitNode(nodeToVisit);
+			
+			if (Puzzle.isSolved(nodeToVisit.getPuzzle())) {
+				return true;
 			}
-		} catch (StackOverflowError e) {
-			//Seems like bruteforcing didn't work...
-			//Considering that the state space of the 12-puzzle is in the hundreds of millions, this is to be expected
-			//The size of both lists is consistently different each time
-			//openList avg. 6700
-			//closedList avg. 2800
-			System.out.println("Stack overflow.");
-			System.out.println("openList.size(): " + openList.size());
-			System.out.println("closedList.size(): " + closedList.size());
+			
+			ArrayList<Node> childNodes = generateChildNodes(nodeToVisit);
+			
+			for (Node child : childNodes) {
+				addChildNode(nodeToVisit, child);
+			}						
+			
+			return search(nodeToVisit);			
 		}
-		
 		return false;
 	}
 	
@@ -145,7 +134,7 @@ public class DepthFirstSearch {
 	private void addChildNode(Node currentNode, Node nodeToAdd) {
 		if (!isDuplicateState(nodeToAdd)) {
 			currentNode.addChild(nodeToAdd);
-			openList.push(nodeToAdd);
+			openList.offer(nodeToAdd);
 		}
 	}
 }
