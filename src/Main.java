@@ -6,7 +6,7 @@ public class Main {
 		//DepthFirstSearch dfs = new DepthFirstSearch(p);
 		//dfs.getSolutionPath();
 		
-		BestFirstSearch bfs = new BestFirstSearch(p, "h2");
+		BestFirstSearch bfs = new BestFirstSearch(p, "h1");
 		bfs.getSolutionPath();
 	}
 }

@@ -31,12 +31,6 @@ public class Puzzle {
 	
 	private void readInputFile() {
 		//Source: https://stackoverflow.com/questions/731365/reading-and-displaying-data-from-a-txt-file
-		
-		
-		//TEST PURPOSES ONLY
-//		initialState = new int[] {1, 2, 3, 4, 5, 6, 7, 0, 9, 10, 11, 8};
-//		puzzle = Arrays.copyOf(initialState, initialState.length);
-		//END TEST
 				
 		initialState = new int[ROW_SIZE * COLUMN_SIZE];
 		try {
@@ -44,6 +38,11 @@ public class Puzzle {
 			String line;
 			while ((line = in.readLine()) != null)
 			{
+				if (line.startsWith("//")) {
+					//some puzzles will start with // are kept there for bookkeeping
+					//ignore those
+					continue;
+				}
 			    String[] tiles = line.split(" ");
 			    
 			    for (int i = 0; i < tiles.length; i++) {

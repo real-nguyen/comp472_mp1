@@ -9,7 +9,7 @@ public class BestFirstSearch {
 	private String outputPath = "output/puzzleBFS-_.txt";	
 	private Puzzle puzzle;	
 	private PriorityQueue<HeuristicNode> openList;
-	private ArrayList<Node> closedList;
+	private ArrayList<HeuristicNode> closedList;
 	private String currentHeuristic;
 	
 	public BestFirstSearch(Puzzle puzzle, String heuristic) {
@@ -17,7 +17,7 @@ public class BestFirstSearch {
 		this.currentHeuristic = heuristic;
 		openList = new PriorityQueue<HeuristicNode>(new BFSComparator());
 		outputPath = outputPath.replaceAll("_", heuristic);
-		closedList = new ArrayList<Node>();
+		closedList = new ArrayList<HeuristicNode>();
 	}
 	
 	public void getSolutionPath() {
@@ -34,15 +34,15 @@ public class BestFirstSearch {
 			if (solutionFound) {
 				//only print solution path if it is found
 				pw.println("Solution found!");
-				Node solutionPathNode = closedList.get(closedList.size() - 1);
+				HeuristicNode solutionPathNode = closedList.get(closedList.size() - 1);
 				Stack<String> buffer = new Stack<String>();
 				
 				while (solutionPathNode != null) {
 					Puzzle state = solutionPathNode.getStateRepresentation();
 					//prefix must be 0 if initial state, otherwise use letter index of empty tile
 					char prefix = solutionPathNode.getParentNode() != null ? state.getEmptyTilePosition() : '0';
-					buffer.push(prefix + " " + state);				
-					solutionPathNode = solutionPathNode.getParentNode();
+					buffer.push(prefix + " " + state + ", h(n) = " + solutionPathNode.getHeuristicValue());				
+					solutionPathNode = (HeuristicNode) solutionPathNode.getParentNode();
 				}
 				
 				while (!buffer.isEmpty()) {
@@ -53,10 +53,11 @@ public class BestFirstSearch {
 				//otherwise print entire search path
 				pw.println("Solution not found :(");
 				for (int i = 0; i < closedList.size(); i++) {
-					//prefix must be 0 if initial state, otherwise use letter index of empty tile				
-					Puzzle state = closedList.get(i).getStateRepresentation();
+					HeuristicNode node = closedList.get(i);								
+					Puzzle state = node.getStateRepresentation();
+					//prefix must be 0 if initial state, otherwise use letter index of empty tile	
 					char prefix = i == 0 ? '0' : state.getEmptyTilePosition();
-					pw.println(prefix + " " + state);
+					pw.println(prefix + " " + state + " h(n) = " + node.getHeuristicValue());
 				}
 			}		
 			
@@ -86,12 +87,12 @@ public class BestFirstSearch {
 		return false;
 	}
 	
-	private void visitNode(Node n) {
+	private void visitNode(HeuristicNode n) {
 		n.visit();
 		closedList.add(n);
 	}
 	
-	private boolean isDuplicateState(Node n) {
+	private boolean isDuplicateState(HeuristicNode n) {
 		return openList.contains(n) || closedList.contains(n);
 	}
 	
