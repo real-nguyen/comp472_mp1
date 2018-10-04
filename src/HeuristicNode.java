@@ -98,7 +98,46 @@ public class HeuristicNode extends Node {
 	private int getChebyshevDistance() {
 		//variation on Manhattan distance that accounts for diagonals
 		//Source: https://en.wikipedia.org/wiki/Chebyshev_distance
-		return 0;
+		int[] goalState = Puzzle.getGoalState();
+		int[] currentState = getPuzzle();
+		int chebyshevDistance = 0;
+		
+		for (int i = 0; i < currentState.length; i++) {
+			if (currentState[i] != goalState[i]) {				
+				int[] point1 = convertIndexToCoordinates(i);
+				int[] point2 = convertIndexToCoordinates(getGoalIndex(currentState[i], goalState));
+				int dx = Math.abs(point2[0] - point1[0]);
+				int dy = Math.abs(point2[1] - point1[1]);
+				
+				chebyshevDistance += Math.max(dx, dy);
+			}
+		}
+		
+		return chebyshevDistance;
+	}
+	
+	private int[] convertIndexToCoordinates(int index) {
+		//converts puzzle index to 2d coordinates (x, y)
+		//note that the coordinates are 1-based
+		//i.e. first position in 12-puzzle is (1, 1) and the last is (4, 3)
+		int[] coordinates = new int[2];
+		
+		//x coordinates
+		coordinates[0] = (index % Puzzle.getRowSize()) + 1;
+		//y coordinates
+		coordinates[1] = (index / Puzzle.getRowSize()) + 1;
+		
+		return coordinates;
+	}
+	
+	private int getGoalIndex(int currentTile, int[] goalState) {
+		int index = 0;
+		
+		while (currentTile != goalState[index]) {
+			index++;
+		}
+		
+		return index;
 	}
 	
 	@Override

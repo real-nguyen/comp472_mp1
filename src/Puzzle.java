@@ -69,6 +69,14 @@ public class Puzzle {
 		return Arrays.copyOf(goalState, goalState.length);
 	}
 	
+	public static int getRowSize() {
+		return ROW_SIZE;
+	}
+	
+	public static int getColumnSize() {
+		return COLUMN_SIZE;
+	}
+	
 	public String toString() {
 		//prints contents of puzzle separated by comma
 		//Source: https://stackoverflow.com/questions/409784/whats-the-simplest-way-to-print-a-java-array
