@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Stack;
 
-public class BestFirstSearch {
-	private String outputPath = "output/puzzleBFS-_.txt";	
+public class AStarSearch {
+	private String outputPath = "output/puzzleAs-_.txt";	
 	private Puzzle puzzle;	
 	private PriorityQueue<HeuristicNode> openList;
 	private ArrayList<HeuristicNode> closedList;
 	private String currentHeuristic;
 	
-	public BestFirstSearch(Puzzle puzzle, String heuristic) {
+	public AStarSearch(Puzzle puzzle, String heuristic) {
 		this.puzzle = puzzle;
 		this.currentHeuristic = heuristic;
-		openList = new PriorityQueue<HeuristicNode>(new BFSComparator());
+		openList = new PriorityQueue<HeuristicNode>(new AStarComparator());
 		outputPath = outputPath.replaceAll("_", heuristic);
 		closedList = new ArrayList<HeuristicNode>();
 	}
@@ -40,7 +40,12 @@ public class BestFirstSearch {
 					Puzzle state = solutionPathNode.getStateRepresentation();
 					//prefix must be 0 if initial state, otherwise use letter index of empty tile
 					char prefix = solutionPathNode.getParentNode() != null ? state.getEmptyTilePosition() : '0';
-					buffer.push(prefix + " " + state + ", h(n) = " + solutionPathNode.getHeuristicValue());				
+					int gn = solutionPathNode.getPathCost();
+					int hn = solutionPathNode.getHeuristicValue();
+					int fn = gn + hn;
+					String fnString = "f(n) = " + gn + " + " + hn + " = " + fn; 
+					buffer.push(prefix + " " + state + ", " + fnString);
+					
 					solutionPathNode = (HeuristicNode) solutionPathNode.getParentNode();
 				}
 				
@@ -56,7 +61,13 @@ public class BestFirstSearch {
 					Puzzle state = node.getStateRepresentation();
 					//prefix must be 0 if initial state, otherwise use letter index of empty tile	
 					char prefix = i == 0 ? '0' : state.getEmptyTilePosition();
-					pw.println(prefix + " " + state + ", h(n) = " + node.getHeuristicValue());
+					
+					int gn = node.getPathCost();
+					int hn = node.getHeuristicValue();
+					int fn = gn + hn;
+					String fnString = "f(n) = " + gn + " + " + hn + " = " + fn; 
+
+					pw.println(prefix + " " + state + ", " + fnString);
 				}
 			}		
 			
@@ -96,7 +107,7 @@ public class BestFirstSearch {
 			System.out.println("closedList.size(): " + closedList.size());
 			System.out.println("----------");
 		}
-
+		
 		return false;
 	}
 	

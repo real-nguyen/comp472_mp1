@@ -71,6 +71,10 @@ public class DepthFirstSearch {
 				visitNode(nodeToVisit);
 				
 				if (Puzzle.isSolved(nodeToVisit.getPuzzle())) {
+					System.out.println("Solution found in " + getClass());
+					System.out.println("openList.size(): " + openList.size());
+					System.out.println("closedList.size(): " + closedList.size());
+					System.out.println("----------");
 					return true;
 				}
 				
@@ -87,14 +91,13 @@ public class DepthFirstSearch {
 				return search(nodeToVisit);
 			}
 		} catch (StackOverflowError e) {
-			//Seems like bruteforcing didn't work...
-			//Considering that the state space of the 12-puzzle is in the hundreds of millions, this is to be expected
 			//The size of both lists is consistently different each time
 			//openList avg. 6700
 			//closedList avg. 2800
-			System.out.println("Stack overflow.");
+			System.out.println("Stack overflow in " + getClass());
 			System.out.println("openList.size(): " + openList.size());
 			System.out.println("closedList.size(): " + closedList.size());
+			System.out.println("----------");
 		}
 		
 		return false;
