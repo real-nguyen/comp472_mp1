@@ -6,10 +6,10 @@ public class Main {
 		DepthFirstSearch dfs = new DepthFirstSearch(p);
 		dfs.getSolutionPath();
 		
-		BestFirstSearch bfs = new BestFirstSearch(p, "hx");
+		BestFirstSearch bfs = new BestFirstSearch(p, "h1");
 		bfs.getSolutionPath();
 		
-		AStarSearch ass = new AStarSearch(p, "hx");
+		AStarSearch ass = new AStarSearch(p, "h1");
 		ass.getSolutionPath();
 	}
 }
