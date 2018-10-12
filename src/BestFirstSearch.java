@@ -67,35 +67,24 @@ public class BestFirstSearch {
 	}
 	
 	public boolean search(HeuristicNode nodeToVisit) {
-		try {
-			if (!openList.isEmpty()) {			
-				nodeToVisit = openList.poll();				
-				visitNode(nodeToVisit);
-				
-				if (Puzzle.isSolved(nodeToVisit.getPuzzle())) {
-					System.out.println("Solution found in " + getClass());
-					System.out.println("openList.size(): " + openList.size());
-					System.out.println("closedList.size(): " + closedList.size());
-					System.out.println("----------");
-					return true;
-				}
-				
-				ArrayList<HeuristicNode> childNodes = generateChildNodes(nodeToVisit);
-				
-				for (HeuristicNode child : childNodes) {
-					addChildNode(nodeToVisit, child);
-				}						
-				
-				return search(nodeToVisit);			
+		while (!openList.isEmpty()) {			
+			nodeToVisit = openList.poll();				
+			visitNode(nodeToVisit);
+			
+			if (Puzzle.isSolved(nodeToVisit.getPuzzle())) {
+				System.out.println("Solution found in " + getClass());
+				System.out.println("openList.size(): " + openList.size());
+				System.out.println("closedList.size(): " + closedList.size());
+				System.out.println("----------");
+				return true;
 			}
-		}
-		catch (StackOverflowError e) {
-			//The size of both lists is consistently different each time
-			System.out.println("Stack overflow in " + getClass());
-			System.out.println("openList.size(): " + openList.size());
-			System.out.println("closedList.size(): " + closedList.size());
-			System.out.println("----------");
-		}
+			
+			ArrayList<HeuristicNode> childNodes = generateChildNodes(nodeToVisit);
+			
+			for (HeuristicNode child : childNodes) {
+				addChildNode(nodeToVisit, child);
+			}					
+		}		
 
 		return false;
 	}

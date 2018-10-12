@@ -1,11 +1,14 @@
-# Comment/uncomment puzzles by removing the #
+# Comment/uncomment puzzles by adding/removing #
 # Program will always solve the last uncommented puzzle
 
 # Example from mini-project handout
 1 0 3 7 5 2 6 4 9 10 11 8
 
 # Nearly completed puzzle
-#1 2 3 4 5 6 7 8 9 11 10 0
+#1 2 3 4 5 6 7 0 9 10 11 8
+
+# Already solved puzzle
+#1 2 3 4 5 6 7 8 9 10 11 0
 
 # The 10 sets below have been generated from https://random.org/integer-sets
 #6 3 8 2 7 11 0 10 9 4 5 1
