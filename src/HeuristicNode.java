@@ -2,9 +2,6 @@ import java.util.ArrayList;
 
 //used for BFS and A*
 public class HeuristicNode extends Node {
-
-	private static final String TILES_OUT_OF_PLACE = "h1";
-	private static final String CHEBYSHEV_DISTANCE = "h2";
 	
 	private int pathCost;			//g(n)		
 	private int heuristicValue;		//h(n)
@@ -49,6 +46,7 @@ public class HeuristicNode extends Node {
 		return pathCost;
 	}
 	
+	//path cost function
 	public void increasePathCost() {
 		//assume that all moves costs 1
 		//if no parent, pathCost = 0
@@ -63,23 +61,18 @@ public class HeuristicNode extends Node {
 	}
 
 	
+	//heuristic function
 	private void setHeuristicValue() {
-		if (currentHeuristic == TILES_OUT_OF_PLACE) {
+		if (currentHeuristic == "h1") {
 			heuristicValue = getTilesOutOfPlace();
 		}
-		else if (currentHeuristic == CHEBYSHEV_DISTANCE) {
+		else if (currentHeuristic == "h2") {
 			heuristicValue = getChebyshevDistance();
 		}
 		else {
-			
+			heuristicValue = getSumOfPermutationInversions();
 		}
 	}
-	
-	public void setCurrentHeuristic(String heuristic) {
-		//switching heuristics mid-search will probably have adverse effects
-		//only use this when you're done with the previous search
-		this.currentHeuristic = heuristic;
-	}	
 	
 	private int getTilesOutOfPlace() {
 		int[] goalState = Puzzle.getGoalState();
@@ -87,6 +80,11 @@ public class HeuristicNode extends Node {
 		int tilesOutOfPlace = 0;
 		
 		for (int i = 0; i < currentState.length; i++) {
+			//ignore if empty tile
+			if (currentState[i] == 0) {
+				continue;
+			}
+			
 			if (currentState[i] != goalState[i]) {
 				tilesOutOfPlace++;
 			}
@@ -103,6 +101,11 @@ public class HeuristicNode extends Node {
 		int chebyshevDistance = 0;
 		
 		for (int i = 0; i < currentState.length; i++) {
+			//ignore if empty tile
+			if (currentState[i] == 0) {
+				continue;
+			}
+			
 			if (currentState[i] != goalState[i]) {				
 				int[] point1 = convertIndexToCoordinates(i);
 				int[] point2 = convertIndexToCoordinates(getGoalIndex(currentState[i], goalState));
@@ -138,6 +141,26 @@ public class HeuristicNode extends Node {
 		}
 		
 		return index;
+	}
+	
+	private int getSumOfPermutationInversions() {
+		int sum = 0;
+		int[] currentState = getPuzzle();
+		
+		for (int i = 0; i < currentState.length; i++) {
+			//ignore if empty tile or last tile
+			if (currentState[i] == 0 || i == currentState.length - 1) {
+				continue;
+			}
+			
+			for (int j = i; j < currentState.length; j++) {
+				if (currentState[j] != 0 && currentState[i] > currentState[j]) {
+					sum++;
+				}
+			}
+		}
+		
+		return sum;
 	}
 	
 	@Override

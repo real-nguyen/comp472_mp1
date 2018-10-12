@@ -40,7 +40,7 @@ public class BestFirstSearch {
 					Puzzle state = solutionPathNode.getStateRepresentation();
 					//prefix must be 0 if initial state, otherwise use letter index of empty tile
 					char prefix = solutionPathNode.getParentNode() != null ? state.getEmptyTilePosition() : '0';
-					buffer.push(prefix + " " + state + ", h(n) = " + solutionPathNode.getHeuristicValue());				
+					buffer.push(prefix + " " + state + "; h(n) = " + solutionPathNode.getHeuristicValue());				
 					solutionPathNode = (HeuristicNode) solutionPathNode.getParentNode();
 				}
 				
@@ -56,7 +56,7 @@ public class BestFirstSearch {
 					Puzzle state = node.getStateRepresentation();
 					//prefix must be 0 if initial state, otherwise use letter index of empty tile	
 					char prefix = i == 0 ? '0' : state.getEmptyTilePosition();
-					pw.println(prefix + " " + state + ", h(n) = " + node.getHeuristicValue());
+					pw.println(prefix + " " + state + "; h(n) = " + node.getHeuristicValue());
 				}
 			}		
 			

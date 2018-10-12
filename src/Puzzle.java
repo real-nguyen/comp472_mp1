@@ -38,13 +38,15 @@ public class Puzzle {
 			String line;
 			while ((line = in.readLine()) != null)
 			{
-				if (line.startsWith("//")) {
-					//some puzzles will start with // are kept there for bookkeeping
+				if (line == null || line.isEmpty() || line.startsWith("#")) {
+					//Lines that start with # in the input file are comments
+					//some puzzles will start with # are kept there for bookkeeping
 					//ignore those
 					continue;
 				}
 			    String[] tiles = line.split(" ");
 			    
+			    //will always take the last puzzle	
 			    for (int i = 0; i < tiles.length; i++) {
 			    	puzzle[i] = Integer.parseInt(tiles[i]);
 			    }

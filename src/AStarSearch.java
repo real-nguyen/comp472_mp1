@@ -44,7 +44,7 @@ public class AStarSearch {
 					int hn = solutionPathNode.getHeuristicValue();
 					int fn = gn + hn;
 					String fnString = "f(n) = " + gn + " + " + hn + " = " + fn; 
-					buffer.push(prefix + " " + state + ", " + fnString);
+					buffer.push(prefix + " " + state + "; " + fnString);
 					
 					solutionPathNode = (HeuristicNode) solutionPathNode.getParentNode();
 				}
@@ -67,7 +67,7 @@ public class AStarSearch {
 					int fn = gn + hn;
 					String fnString = "f(n) = " + gn + " + " + hn + " = " + fn; 
 
-					pw.println(prefix + " " + state + ", " + fnString);
+					pw.println(prefix + " " + state + "; " + fnString);
 				}
 			}		
 			
