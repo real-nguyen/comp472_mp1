@@ -10,6 +10,7 @@ public class AStarSearch {
 	private PriorityQueue<HeuristicNode> openList;
 	private ArrayList<HeuristicNode> closedList;
 	private String currentHeuristic;
+	private double elapsedTime;
 	
 	public AStarSearch(Puzzle puzzle, String heuristic) {
 		this.puzzle = puzzle;
@@ -33,6 +34,8 @@ public class AStarSearch {
 			if (solutionFound) {
 				//only print solution path if it is found
 				pw.println("Solution found!");
+				pw.println("Elapsed time: " + elapsedTime + " seconds");
+				pw.println("Search path size: " + closedList.size());
 				HeuristicNode solutionPathNode = closedList.get(closedList.size() - 1);
 				Stack<String> buffer = new Stack<String>();
 				
@@ -49,6 +52,8 @@ public class AStarSearch {
 					solutionPathNode = (HeuristicNode) solutionPathNode.getParentNode();
 				}
 				
+				pw.println("Solution path size: " + buffer.size());
+				
 				while (!buffer.isEmpty()) {
 					pw.println(buffer.pop());
 				}
@@ -56,6 +61,8 @@ public class AStarSearch {
 			else {
 				//otherwise print entire search path
 				pw.println("Solution not found :(");
+				pw.println("Elapsed time: " + elapsedTime + " seconds");
+				pw.println("Search path size: " + closedList.size());
 				for (int i = 0; i < closedList.size(); i++) {
 					HeuristicNode node = closedList.get(i);								
 					Puzzle state = node.getStateRepresentation();
@@ -78,14 +85,23 @@ public class AStarSearch {
 	}
 	
 	public boolean search(HeuristicNode nodeToVisit) {
+		//measure elapsed time
+		//not terribly accurate but serves our purposes
+		//Source: https://www.baeldung.com/java-measure-elapsed-time
+		long start = System.currentTimeMillis();
+		long end = 0;
+		
 		while (!openList.isEmpty()) {			
 			nodeToVisit = openList.poll();				
 			visitNode(nodeToVisit);
 			
 			if (Puzzle.isSolved(nodeToVisit.getPuzzle())) {
+				end = System.currentTimeMillis();
+				elapsedTime = (end - start) / 1000.00;
 				System.out.println("Solution found in " + getClass());
 				System.out.println("openList.size(): " + openList.size());
 				System.out.println("closedList.size(): " + closedList.size());
+				System.out.println("Elapsed time: " + elapsedTime + " seconds");
 				System.out.println("----------");
 				return true;
 			}
@@ -96,6 +112,14 @@ public class AStarSearch {
 				addChildNode(nodeToVisit, child);
 			}							
 		}
+		
+		end = System.currentTimeMillis();
+		elapsedTime = (end - start) / 1000.00;
+		System.out.println("No solution found in " + getClass());
+		System.out.println("openList.size(): " + openList.size());
+		System.out.println("closedList.size(): " + closedList.size());
+		System.out.println("Elapsed time: " + elapsedTime + " seconds");
+		System.out.println("----------");
 		
 		return false;
 	}

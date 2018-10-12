@@ -10,6 +10,7 @@ public class DepthFirstSearch {
 	private Puzzle puzzle;	
 	private Stack<Node> openList;
 	private ArrayList<Node> closedList;
+	private double elapsedTime;
 	
 	public DepthFirstSearch(Puzzle puzzle) {
 		this.puzzle = puzzle;
@@ -31,6 +32,8 @@ public class DepthFirstSearch {
 			if (solutionFound) {
 				//only print solution path if it is found
 				pw.println("Solution found!");
+				pw.println("Elapsed time: " + elapsedTime + " seconds");
+				pw.println("Search path size: " + closedList.size());
 				Node solutionPathNode = closedList.get(closedList.size() - 1);
 				Stack<String> buffer = new Stack<String>();
 				
@@ -42,6 +45,8 @@ public class DepthFirstSearch {
 					solutionPathNode = solutionPathNode.getParentNode();
 				}
 				
+				pw.println("Solution path length: " + buffer.size());
+				
 				while (!buffer.isEmpty()) {
 					pw.println(buffer.pop());
 				}
@@ -49,6 +54,8 @@ public class DepthFirstSearch {
 			else {
 				//otherwise print entire search path
 				pw.println("Solution not found :(");
+				pw.println("Elapsed time: " + elapsedTime + " seconds");
+				pw.println("Search path size: " + closedList.size());
 				for (int i = 0; i < closedList.size(); i++) {
 					//prefix must be 0 if initial state, otherwise use letter index of empty tile				
 					Puzzle state = closedList.get(i).getStateRepresentation();
@@ -65,14 +72,23 @@ public class DepthFirstSearch {
 	}
 	
 	private boolean search(Node nodeToVisit) {
+		//measure elapsed time
+		//not terribly accurate but serves our purposes
+		//Source: https://www.baeldung.com/java-measure-elapsed-time
+		long start = System.currentTimeMillis();
+		long end = 0;
+		
 		while (!openList.isEmpty()) {
 			nodeToVisit = openList.pop();
 			visitNode(nodeToVisit);
 			
 			if (Puzzle.isSolved(nodeToVisit.getPuzzle())) {
+				end = System.currentTimeMillis();
+				elapsedTime = (end - start) / 1000.00;
 				System.out.println("Solution found in " + getClass());
 				System.out.println("openList.size(): " + openList.size());
 				System.out.println("closedList.size(): " + closedList.size());
+				System.out.println("Elapsed time: " + elapsedTime + " seconds");
 				System.out.println("----------");
 				return true;
 			}
@@ -87,6 +103,14 @@ public class DepthFirstSearch {
 				addChildNode(nodeToVisit, child);
 			}
 		}
+		
+		end = System.currentTimeMillis();
+		elapsedTime = (end - start) / 1000.00;
+		System.out.println("No solution found in " + getClass());
+		System.out.println("openList.size(): " + openList.size());
+		System.out.println("closedList.size(): " + closedList.size());
+		System.out.println("Elapsed time: " + elapsedTime + " seconds");
+		System.out.println("----------");
 		
 		return false;
 	}
