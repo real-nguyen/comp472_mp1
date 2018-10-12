@@ -24,3 +24,6 @@ hs_err_pid*
 
 # metadata folder
 .metadata
+
+# output folder
+output
