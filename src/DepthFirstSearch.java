@@ -126,6 +126,7 @@ public class DepthFirstSearch {
 	
 	private ArrayList<Node> generateChildNodes(Node currentNode) {
 		//generate all possible moves from this state and add them as children
+		//Source: https://github.com/gferrer/8-Puzzle-Solver
 		ArrayList<Node> childNodes = new ArrayList<Node>();
 		
 		Puzzle currentState = currentNode.getStateRepresentation();

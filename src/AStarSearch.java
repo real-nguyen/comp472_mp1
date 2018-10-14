@@ -135,6 +135,7 @@ public class AStarSearch {
 	
 	private ArrayList<HeuristicNode> generateChildNodes(HeuristicNode currentNode) {
 		//generate all possible moves from this state and add them as children
+		//Source: https://github.com/gferrer/8-Puzzle-Solver
 		ArrayList<HeuristicNode> childNodes = new ArrayList<HeuristicNode>();
 		
 		Puzzle currentState = currentNode.getStateRepresentation();

@@ -1,8 +1,8 @@
 # Already solved puzzle
-1 2 3 4 5 6 7 8 0
+#1 2 3 4 5 6 7 8 0
 
 # Nearly solved puzzle
-#1 2 3 4 5 6 7 0 8
+1 2 3 4 5 6 7 0 8
 
 # Randomly generated puzzles from https://random.org/integer-sets
 #3 5 7 4 6 2 8 0 1

@@ -9,10 +9,10 @@ public class Main {
 		BreadthFirstSearch bfs = new BreadthFirstSearch(p);
 		bfs.getSolutionPath();
 		
-		BestFirstSearch befs = new BestFirstSearch(p, "h2");
+		BestFirstSearch befs = new BestFirstSearch(p, "h1");
 		befs.getSolutionPath();
 		
-		AStarSearch ass = new AStarSearch(p, "h2");
+		AStarSearch ass = new AStarSearch(p, "h1");
 		ass.getSolutionPath();
 	}
 }
