@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Stack;
 
-public class AStarSearch {
+public class AlgorithmAStar {
 	private String outputPath = "output/puzzleAs-_.txt";	
 	private Puzzle puzzle;	
 	private PriorityQueue<HeuristicNode> openList;
@@ -12,7 +12,7 @@ public class AStarSearch {
 	private String currentHeuristic;
 	private double elapsedTime;
 	
-	public AStarSearch(Puzzle puzzle, String heuristic) {
+	public AlgorithmAStar(Puzzle puzzle, String heuristic) {
 		this.puzzle = puzzle;
 		this.currentHeuristic = heuristic;
 		openList = new PriorityQueue<HeuristicNode>(new AStarComparator());
